@@ -17,21 +17,29 @@
                     <span class="text">{{seller.supports[0].description}}</span>
                 </div>
             </div>
-            <div class="support-count" v-if="seller.supports">
+            <div class="support-count" v-if="seller.supports" @click="showDetail">
                 <span class="count">{{seller.supports.length}}个</span>
                 <i class="icon-keyboard_arrow_right"></i>
             </div>
         </div>
-        <div class="bulletin-wrapper">
+        <div class="bulletin-wrapper" @click="showDetail">
             <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
             <i class="icon-keyboard_arrow_right"></i>
         </div>
         <div class="background-avatar">
             <img width="100%" height="100%" :src="seller.avatar">
         </div>
-        <div class="detail-wrapper" v-show="detailIsShow">
-
-        </div>
+        <transition name="fade">
+            <div class="detail-wrapper" v-show="detailIsShow">
+                <div class="detail-content">
+                    <h1 class="name">{{seller.name}}</h1>
+                    <star :size="48" :score="seller.score" class="star-wrapper"></star>
+                </div>
+                <div class="close">
+                    <i class="icon-close" @click="hideDetail"></i>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -166,9 +174,40 @@
             width 100%
             height 100%
             background-color rgba(7, 17, 27, 0.8)
+            overflow auto
+            .detail-content
+                min-height calc(100% - 96px)
+                margin-bottom 96px
+                .name
+                    height 32px
+                    padding-top 64px
+                    line-height 32px
+                    color rgb(255, 255, 255)
+                    font-size 16px
+                    font-weight 700
+                    text-align center
+                .star-wrapper
+                    margin-top 16px
+            .close
+                display block
+                width 32px
+                height 32px
+                margin -64px auto
+                .icon-close
+                    color rgba(255, 255, 255, 0.5)
+                    font-size 32px
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter, .fade-leave-active {
+        opacity: 0
+    }
 </style>
 
 <script>
+    import star from 'components/star/'
+
     export default {
         props: ['seller'],
         data: function() {
@@ -178,14 +217,17 @@
         },
         methods: {
             showDetail: function() {
-                this.detailIsShow = true
+                this.detailIsShow = true;
+            },
+            hideDetail: function() {
+                this.detailIsShow = false;
             }
         },
         created() {
             this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+        },
+        components: {
+            star
         }
     }
-
-
-
 </script>
