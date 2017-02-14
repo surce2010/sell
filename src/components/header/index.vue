@@ -34,6 +34,23 @@
                 <div class="detail-content">
                     <h1 class="name">{{seller.name}}</h1>
                     <star :size="48" :score="seller.score" class="star-wrapper"></star>
+                    <div class="subtitle">
+                        <span class="line"></span>
+                        <span class="title">优惠信息</span>
+                        <span class="line"></span>
+                    </div>
+                    <div class="support">
+                        <div class="support-item" v-for="item in seller.supports">
+                            <span class="icon" :class="classMap[item.type]"></span>
+                            <span class="text">{{item.description}}</span>
+                        </div>
+                    </div>
+                    <div class="subtitle">
+                        <span class="line"></span>
+                        <span class="title">商家公告</span>
+                        <span class="line"></span>
+                    </div>
+                    <div class="bulletin">{{seller.bulletin}}</div>
                 </div>
                 <div class="close">
                     <i class="icon-close" @click="hideDetail"></i>
@@ -188,6 +205,64 @@
                     text-align center
                 .star-wrapper
                     margin-top 16px
+                .subtitle
+                    display flex
+                    height 14px
+                    margin-top 28px
+                    padding 0 36px
+                    line-height 14px
+                    align-items center
+                    .line
+                        flex 1
+                        height 1px
+                        background-color rgba(255, 255, 255, 0.2)
+                    .title
+                        padding 0 12px
+                        color rgb(255, 255, 255)
+                        font-size 14px
+                        font-weight 700
+                .support
+                    margin-top 24px
+                    padding 0 48px
+                    .support-item
+                        height 16px
+                        margin-bottom 12px
+                        line-height 16px
+                        color #fff
+                        font-size 10px
+                        font-weight 200
+                        white-space nowrap
+                        text-overflow ellipsis
+                        overflow hidden
+                        &:last-of-type
+                            margin-bottom 0
+                        .icon
+                            display inline-block
+                            width 16px
+                            height 16px
+                            vertical-align top
+                            background-size 16px 16px
+                            background-repeat no-repeat
+                            &.decrease
+                                bg-image('decrease_2')
+                            &.discount
+                                bg-image('discount_2')
+                            &.guarantee
+                                bg-image('guarantee_2')
+                            &.invoice
+                                bg-image('invoice_2')
+                            &.special
+                                bg-image('special_2')
+                        .text
+                            margin-left 6px
+                            line-height 12px
+                .bulletin
+                    margin-top 24px
+                    padding 0 48px
+                    line-height 24px
+                    color #fff
+                    font-size 12px
+                    font-weight 200
             .close
                 display block
                 width 32px
