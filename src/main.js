@@ -27,8 +27,8 @@ let router = new VueRouter({
     routes
 });
 
-new Vue({
+var app = new Vue({
+    el: '#app',
     router,
-    template: '<App/>',
-    components: {App}
-}).$mount('#app');
+    ...App
+});
