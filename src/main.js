@@ -12,10 +12,6 @@ import 'common/stylus/'
 Vue.use(VueRouter);
 Vue.use(vueResource);
 
-function helloWorld(args) {
-  alert('helloWorld!');
-}
-
 var routes = [{
   path: '/seller',
   component: seller
