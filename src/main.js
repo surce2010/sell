@@ -12,23 +12,27 @@ import 'common/stylus/'
 Vue.use(VueRouter);
 Vue.use(vueResource);
 
+function helloWorld(args) {
+  alert('helloWorld!');
+}
+
 var routes = [{
-    path: '/seller',
-    component: seller
+  path: '/seller',
+  component: seller
 }, {
-    path: '/goods',
-    component: goods
+  path: '/goods',
+  component: goods
 }, {
-    path: '/ratings',
-    component: ratings
+  path: '/ratings',
+  component: ratings
 }];
 
 let router = new VueRouter({
-    routes
+  routes
 });
 
 var app = new Vue({
-    el: '#app',
-    router,
-    ...App
+  el: '#app',
+  router,
+  ...App
 });
