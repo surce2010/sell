@@ -33,6 +33,7 @@
                 </li>
             </ul>
         </div>
+        <v-shopcart></v-shopcart>
     </div>
 </template>
 
@@ -144,6 +145,7 @@
 
 <script type="text/ecmascript-6">
     import BScroll from 'better-scroll';
+    import shopcart from 'components/shopcart/';
 
     var ERR_OK = 0;
     export default {
@@ -202,7 +204,7 @@
                 });
                 this.foodsScroll.on('scroll', (pos) => {
                     this.scrollY = Math.abs(Math.round(pos.y));
-                })
+                });
             },
             _clacHeight() {
                 let foodsList = this.$el.getElementsByClassName('food-list-hook');
@@ -214,6 +216,9 @@
                     this.listHeight.push(height);
                 }
             }
+        },
+        components: {
+            'v-shopcart': shopcart
         }
     };
 </script>
