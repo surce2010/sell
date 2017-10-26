@@ -271,13 +271,10 @@
                 .icon-close
                     color rgba(255, 255, 255, 0.5)
                     font-size 32px
-
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s
-    }
-    .fade-enter, .fade-leave-active {
-        opacity: 0
-    }
+    .fade-enter-active, .fade-leave-active
+        transition opacity .5s
+    .fade-enter, .fade-leave-to
+        opacity 0
 </style>
 
 <script>

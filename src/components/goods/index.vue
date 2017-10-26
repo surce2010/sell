@@ -4,7 +4,7 @@
         <ul>
             <li v-for="(item, index) in goods" class="menu-item" :class="{current: currentIndex === index}" @click="scrollMenu(index, $event)">
                 <span class="text">
-                        <span v-show="item.type > 0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
+                    <span v-show="item.type > 0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
                 </span>
             </li>
         </ul>
@@ -28,6 +28,7 @@
                                 <span class="now">¥{{food.price}}</span><span v-show="food.oldPrice" class="old">¥{{food.oldPrice}}</span>
                             </div>
                         </div>
+                        <v-cartcontrol :food="food"></v-cartcontrol>
                     </li>
                 </ul>
             </li>
@@ -141,11 +142,16 @@
                         .old
                             color rab(147, 153, 159)
                             font-size 10px
+                .cartcontrol
+                    position absolute
+                    right 6px
+                    bottom 12px
 </style>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll';
 import shopcart from 'components/shopcart/';
+import cartcontrol from 'components/cartcontrol/';
 
 var ERR_OK = 0;
 export default {
@@ -158,7 +164,8 @@ export default {
         return {
             goods: [],
             listHeight: [],
-            scrollY: 0
+            scrollY: 0,
+            selectFoods: []
         }
     },
     created() {
@@ -200,7 +207,8 @@ export default {
                 click: true // 启用click事件
             });
             this.foodsScroll = new BScroll(this.$refs.foods, {
-                probeType: 3 // 实时派发scroll事件
+                probeType: 3, // 实时派发scroll事件
+                click: true // 启用click事件
             });
             this.foodsScroll.on('scroll', (pos) => {
                 this.scrollY = Math.abs(Math.round(pos.y));
@@ -218,7 +226,8 @@ export default {
         }
     },
     components: {
-        'v-shopcart': shopcart
+        'v-shopcart': shopcart,
+        'v-cartcontrol': cartcontrol
     }
 };
 </script>
