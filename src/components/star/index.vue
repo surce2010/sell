@@ -1,7 +1,7 @@
 <template>
-    <div class="star-wrapper" :class="starType">
-        <div v-for="itemClass in itemClassList" class="star" :class="itemClass"></div>
-    </div>
+<div class="star-wrapper" :class="starType">
+    <div v-for="itemClass in itemClassList" class="star" :class="itemClass"></div>
+</div>
 </template>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -75,34 +75,34 @@
 </style>
 
 <script>
-    const LENGTH = 5;
-    const CLS_ON = 'on';
-    const CLS_HALF = 'half';
-    const CLS_OFF = 'off';
+const LENGTH = 5;
+const CLS_ON = 'on';
+const CLS_HALF = 'half';
+const CLS_OFF = 'off';
 
-    export default {
-        props: ['size', 'score'],
-        computed: {
-            starType: function() {
-                return 'star-' + this.size;
-            },
-            itemClassList: function() {
-                let result = [];
-                let score = Math.floor(this.score * 2) / 2;
-                let hasHalf = score % 1 > 0 ? true : false;
-                if (score >= 1) {
-                    for (var i = 1; i <= score; i++) {
-                        result.push(CLS_ON);
-                    }
+export default {
+    props: ['size', 'score'],
+    computed: {
+        starType: function() {
+            return 'star-' + this.size;
+        },
+        itemClassList: function() {
+            let result = [];
+            let score = Math.floor(this.score * 2) / 2;
+            let hasHalf = score % 1 > 0 ? true : false;
+            if (score >= 1) {
+                for (var i = 1; i <= score; i++) {
+                    result.push(CLS_ON);
                 }
-                if (hasHalf) {
-                    result.push(CLS_HALF);
-                }
-                while (result.length < LENGTH) {
-                    result.push(CLS_OFF);
-                }
-                return result;
             }
+            if (hasHalf) {
+                result.push(CLS_HALF);
+            }
+            while (result.length < LENGTH) {
+                result.push(CLS_OFF);
+            }
+            return result;
         }
     }
+}
 </script>

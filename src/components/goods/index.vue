@@ -1,40 +1,40 @@
 <template>
-    <div class="goods">
-        <div class="menu-wrapper" ref="menu">
-            <ul>
-                <li v-for="(item, index) in goods" class="menu-item" :class="{current: currentIndex === index}" @click="scrollMenu(index, $event)">
-                    <span class="text">
+<div class="goods">
+    <div class="menu-wrapper" ref="menu">
+        <ul>
+            <li v-for="(item, index) in goods" class="menu-item" :class="{current: currentIndex === index}" @click="scrollMenu(index, $event)">
+                <span class="text">
                         <span v-show="item.type > 0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <div class="foods-wrapper" ref="foods">
-            <ul>
-                <li v-for="item in goods" class="food-list food-list-hook">
-                    <h1 class="title">{{item.name}}</h1>
-                    <ul>
-                        <li v-for="food in item.foods" class="food-item">
-                            <div class="icon">
-                                <img :src="food.icon">
-                            </div>
-                            <div class="content">
-                                <h2 class="name">{{food.name}}</h2>
-                                <p class="desc">{{food.description}}</p>
-                                <div class="extra">
-                                    <span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
-                                </div>
-                                <div class="price">
-                                    <span class="now">¥{{food.price}}</span><span v-show="food.oldPrice" class="old">¥{{food.oldPrice}}</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <v-shopcart></v-shopcart>
+                </span>
+            </li>
+        </ul>
     </div>
+    <div class="foods-wrapper" ref="foods">
+        <ul>
+            <li v-for="item in goods" class="food-list food-list-hook">
+                <h1 class="title">{{item.name}}</h1>
+                <ul>
+                    <li v-for="food in item.foods" class="food-item">
+                        <div class="icon">
+                            <img :src="food.icon">
+                        </div>
+                        <div class="content">
+                            <h2 class="name">{{food.name}}</h2>
+                            <p class="desc">{{food.description}}</p>
+                            <div class="extra">
+                                <span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
+                            </div>
+                            <div class="price">
+                                <span class="now">¥{{food.price}}</span><span v-show="food.oldPrice" class="old">¥{{food.oldPrice}}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <v-shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></v-shopcart>
+</div>
 </template>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -144,81 +144,81 @@
 </style>
 
 <script type="text/ecmascript-6">
-    import BScroll from 'better-scroll';
-    import shopcart from 'components/shopcart/';
+import BScroll from 'better-scroll';
+import shopcart from 'components/shopcart/';
 
-    var ERR_OK = 0;
-    export default {
-        props: {
-            seller: {
-                type: Object
-            }
-        },
-        data() {
-            return {
-                goods: [],
-                listHeight: [],
-                scrollY: 0
-            }
-        },
-        created() {
-            this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
-            this.$http.get('/api/goods').then((res) => {
-                res = res.body;
-                if (res.errno === ERR_OK) {
-                    this.goods = res.data;
-                    this.$nextTick(() => {
-                        this._initScroll();
-                        this._clacHeight();
-                    });
-                }
-            })
-        },
-        computed: {
-            currentIndex() {
-                for (let i=0; i<this.listHeight.length; i++) {
-                    let height1 = this.listHeight[i];
-                    let height2 = this.listHeight[i+1];
-                    if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-                        return i;
-                    }
-                }
-                return 0;
-            }
-        },
-        methods: {
-            scrollMenu(index, event) {
-                if (!event._constructed) {
-                    return;
-                }
-                let foodsList = this.$el.getElementsByClassName('food-list-hook');
-                let el = foodsList[index];
-                this.foodsScroll.scrollToElement(el, 300);
-            },
-            _initScroll() {
-                this.menuScroll = new BScroll(this.$refs.menu, {
-                    click: true // 启用click事件
-                });
-                this.foodsScroll = new BScroll(this.$refs.foods, {
-                    probeType: 3 // 实时派发scroll事件
-                });
-                this.foodsScroll.on('scroll', (pos) => {
-                    this.scrollY = Math.abs(Math.round(pos.y));
-                });
-            },
-            _clacHeight() {
-                let foodsList = this.$el.getElementsByClassName('food-list-hook');
-                let height = 0;
-                this.listHeight.push(height);
-                for (let i=0; i<foodsList.length; i++) {
-                    let item = foodsList[i];
-                    height += item.clientHeight;
-                    this.listHeight.push(height);
-                }
-            }
-        },
-        components: {
-            'v-shopcart': shopcart
+var ERR_OK = 0;
+export default {
+    props: {
+        seller: {
+            type: Object
         }
-    };
+    },
+    data() {
+        return {
+            goods: [],
+            listHeight: [],
+            scrollY: 0
+        }
+    },
+    created() {
+        this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+        this.$http.get('/api/goods').then((res) => {
+            res = res.body;
+            if (res.errno === ERR_OK) {
+                this.goods = res.data;
+                this.$nextTick(() => {
+                    this._initScroll();
+                    this._clacHeight();
+                });
+            }
+        })
+    },
+    computed: {
+        currentIndex() {
+            for (let i = 0; i < this.listHeight.length; i++) {
+                let height1 = this.listHeight[i];
+                let height2 = this.listHeight[i + 1];
+                if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+                    return i;
+                }
+            }
+            return 0;
+        }
+    },
+    methods: {
+        scrollMenu(index, event) {
+            if (!event._constructed) {
+                return;
+            }
+            let foodsList = this.$el.getElementsByClassName('food-list-hook');
+            let el = foodsList[index];
+            this.foodsScroll.scrollToElement(el, 300);
+        },
+        _initScroll() {
+            this.menuScroll = new BScroll(this.$refs.menu, {
+                click: true // 启用click事件
+            });
+            this.foodsScroll = new BScroll(this.$refs.foods, {
+                probeType: 3 // 实时派发scroll事件
+            });
+            this.foodsScroll.on('scroll', (pos) => {
+                this.scrollY = Math.abs(Math.round(pos.y));
+            });
+        },
+        _clacHeight() {
+            let foodsList = this.$el.getElementsByClassName('food-list-hook');
+            let height = 0;
+            this.listHeight.push(height);
+            for (let i = 0; i < foodsList.length; i++) {
+                let item = foodsList[i];
+                height += item.clientHeight;
+                this.listHeight.push(height);
+            }
+        }
+    },
+    components: {
+        'v-shopcart': shopcart
+    }
+};
 </script>

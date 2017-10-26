@@ -1,22 +1,22 @@
 <template>
-    <div class="shopcart">
-        <div class="l-shopcart">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="icon-shopping_cart"></i>
-                </div>
-            </div>
-            <div class="price">
-                ¥0
-            </div>
-            <div class="desc">
-                另需配送费¥4元
+<div class="shopcart">
+    <div class="l-shopcart">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="icon-shopping_cart"></i>
             </div>
         </div>
-        <div class="r-shopcart">
-            ¥20起送
+        <div class="price">
+            ¥0
+        </div>
+        <div class="deliveryPrice">
+            另需配送费¥{{deliveryPrice}}元
         </div>
     </div>
+    <div class="r-shopcart">
+        ¥{{minPrice}}起送
+    </div>
+</div>
 </template>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -63,26 +63,36 @@
                 font-size 16px
                 font-weight 700
                 vertical-align top
-            .desc
+            .deliveryPrice
                 display inline-block
                 margin-top 12px
                 padding-left 12px
                 line-height 24px
                 color rgba(255, 255, 255, .4)
-                font-size 16px
+                font-size 10px
                 vertical-align top
         .r-shopcart
-            flex 0 0 105px
-            width 105px
+            flex 0 0 100px
+            width 100px
             background-color #2b333b
             line-height 46px
             color rgba(255, 255, 255, .4)
-            font-size 16px
+            font-size 12px
             font-weight 700
             text-align center
 </style>
 
 <script>
 export default {
+    props: {
+        deliveryPrice: {
+            type: Number,
+            default: 0
+        },
+        minPrice: {
+            type: Number,
+            default: 0
+        }
+    }
 }
 </script>
