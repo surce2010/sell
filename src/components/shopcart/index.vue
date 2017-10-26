@@ -106,6 +106,11 @@
 
 <script>
 export default {
+    created: function() {
+        eventBus.$on('addBar', () => {
+            console.log('获取数据');
+        });
+    },
     props: {
         selectFoods: {
             type: Array,

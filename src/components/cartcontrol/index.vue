@@ -56,7 +56,8 @@ export default {
                 this.$set(this.food, 'count', 1);
             } else {
                 this.food.count++;
-            }
+            };
+            eventBus.$emit('addBar', '传递的参数');
         },
         reduceCart: function(event) {
             if (!event._constructed) {

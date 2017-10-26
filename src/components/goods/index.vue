@@ -34,7 +34,7 @@
             </li>
         </ul>
     </div>
-    <v-shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></v-shopcart>
+    <v-shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></v-shopcart>
 </div>
 </template>
 
@@ -148,7 +148,7 @@
                     bottom 12px
 </style>
 
-<script type="text/ecmascript-6">
+<script>
 import BScroll from 'better-scroll';
 import shopcart from 'components/shopcart/';
 import cartcontrol from 'components/cartcontrol/';
@@ -164,8 +164,7 @@ export default {
         return {
             goods: [],
             listHeight: [],
-            scrollY: 0,
-            selectFoods: []
+            scrollY: 0
         }
     },
     created() {
@@ -191,6 +190,17 @@ export default {
                 }
             }
             return 0;
+        },
+        selectFoods() {
+            let foods = [];
+            this.goods.forEach((good, item) => {
+                good.foods.forEach((food) => {
+                    if (food.count) {
+                        foods.push(food);
+                    }
+                })
+            })
+            return foods;
         }
     },
     methods: {

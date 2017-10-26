@@ -7,28 +7,30 @@ import goods from 'components/goods/';
 import ratings from 'components/ratings/';
 import seller from 'components/seller/';
 
-import 'common/stylus/'
+import 'common/stylus/';
 
 Vue.use(VueRouter);
 Vue.use(vueResource);
 
 var routes = [{
-  path: '/seller',
-  component: seller
+    path: '/seller',
+    component: seller
 }, {
-  path: '/goods',
-  component: goods
+    path: '/goods',
+    component: goods
 }, {
-  path: '/ratings',
-  component: ratings
+    path: '/ratings',
+    component: ratings
 }];
 
 let router = new VueRouter({
-  routes
+    routes
 });
 
+window.eventBus = new Vue({});
+
 var app = new Vue({
-  el: '#app',
-  router,
-  ...App
+    el: '#app',
+    router,
+    ...App
 });
