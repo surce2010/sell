@@ -17,6 +17,11 @@
     <div class="r-shopcart" :class="{'enough': this.totalPrice>=this.minPrice}">
         {{payDesc}}
     </div>
+    <div class="ball-wrap">
+        <transition-group tag="div" name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+            <div v-for="(ball, index) in balls" v-show="ball.show" :key="index" class="ball"></div>
+        </transition-group>
+    </div>
 </div>
 </template>
 
@@ -102,13 +107,25 @@
             &.enough
                 background-color #00b43c
                 color #fff
+        .ball-wrap
+            .ball
+                position fixed
+                left 32px
+                bottom 22px
+                z-index 200
+                width 16px
+                height 16px
+                background-color rgb(0, 160, 220)
+                border-radius 50%
 </style>
 
 <script>
+import Velocity from 'velocity-animate';
+
 export default {
     created: function() {
-        eventBus.$on('addBar', () => {
-            console.log('获取数据');
+        eventBus.$on('addBar', (target) => {
+            this.drop(target);
         });
     },
     props: {
@@ -125,6 +142,22 @@ export default {
         minPrice: {
             type: Number,
             default: 0
+        }
+    },
+    data() {
+        return {
+            balls: [{
+                show: false
+            }, {
+                show: false
+            }, {
+                show: false
+            }, {
+                show: false
+            }, {
+                show: false
+            }],
+            dropBalls: []
         }
     },
     computed: {
@@ -150,6 +183,53 @@ export default {
             } else {
                 return '去结算'
             }
+        }
+    },
+    methods: {
+        drop: function(target) {
+            for (var i = 0; i < this.balls.length; i++) {
+                let ball = this.balls[i];
+                if (!ball.show) {
+                    let rect = target.getBoundingClientRect();
+                    ball.x = rect.left - 32;
+                    ball.y = -(window.innerHeight - rect.top - 22);
+                    ball.show = true;
+                    this.dropBalls.push(ball);
+                    return;
+                };
+            };
+        },
+        beforeEnter: function(el) {
+            for (var i = 0; i < this.balls.length; i++) {
+                let ball = this.balls[i];
+                if (ball.show) {
+                    el.style.transform = 'transformX(' + ball.x + 'px)';
+                }
+            }
+        },
+        enter: function(el, done) {
+            Velocity(el, {
+                translateX: '200px',
+                translateY: 0,
+                opacity: 1
+            }, {
+                complete: done,
+                duration: 400,
+                easing: [0.49, -0.29, 0.75, 0.41]
+            });
+        },
+        afterEnter(el) {
+            let ball = this.dropBalls.shift();
+            if (ball) {
+                ball.show = false;
+                Velocity(el, {
+                    translateX: 0,
+                    translateY: 0,
+                    opacity: 0
+                }, {
+                    duration: 0
+                });
+            };
         }
     }
 }

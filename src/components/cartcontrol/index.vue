@@ -35,7 +35,7 @@
             text-align center
     .move-enter, .move-leave-to
         opacity 0
-        transform translate3D(24px, 0, 0) rotate(180deg)
+        transform translate3d(24px, 0, 0) rotate(180deg)
     .move-enter-active, .move-leave-active
         transition all .4s linear
 </style>
@@ -57,7 +57,7 @@ export default {
             } else {
                 this.food.count++;
             };
-            eventBus.$emit('addBar', '传递的参数');
+            eventBus.$emit('addBar', event.target);
         },
         reduceCart: function(event) {
             if (!event._constructed) {
