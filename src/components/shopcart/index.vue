@@ -200,14 +200,6 @@ export default {
             };
         },
         beforeEnter: function(el) {
-            // for (var i = 0; i < this.balls.length; i++) {
-            //     let ball = this.balls[i];
-            //     if (ball.show) {
-            //         el.style.transform = 'transformX(' + ball.x + 'px)';
-            //     }
-            // }
-        },
-        enter: function(el, done) {
             for (var i = 0; i < this.balls.length; i++) {
                 let ball = this.balls[i];
                 if (ball.show) {
@@ -218,17 +210,19 @@ export default {
                     }, {
                         duration: 0
                     });
-                    Velocity(el, {
-                        translateX: 0,
-                        translateY: 0,
-                        opacity: 1
-                    }, {
-                        complete: done,
-                        duration: 400,
-                        easing: [0.17, 0.67, 0.83, 0.67]
-                    });
                 }
             }
+        },
+        enter: function(el, done) {
+            Velocity(el, {
+                translateX: 0,
+                translateY: 0,
+                opacity: 1
+            }, {
+                complete: done,
+                duration: 1000,
+                easing: 'easeInOutSine'
+            })
         },
         afterEnter(el) {
             let ball = this.dropBalls.shift();
