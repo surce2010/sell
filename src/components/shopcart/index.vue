@@ -1,31 +1,48 @@
 <template>
-<div class="shopcart">
-    <div class="l-shopcart">
-        <div class="logo">
-            <div class="logo-icon" :class="{'highlight': totalCount>0}">
-                <i class="icon-shopping_cart"></i>
+<div>
+    <div class="shopcart">
+        <div class="l-shopcart">
+            <div class="logo">
+                <div class="logo-icon" :class="{'highlight': totalCount>0}">
+                    <i class="icon-shopping_cart"></i>
+                </div>
+                <span class="num" v-show="totalCount>0">{{totalCount}}</span>
             </div>
-            <span class="num" v-show="totalCount>0">{{totalCount}}</span>
+            <div class="price" :class="{'highlight': totalPrice>0}">
+                ¥{{totalPrice}}
+            </div>
+            <div class="deliveryPrice">
+                另需配送费¥{{deliveryPrice}}元
+            </div>
         </div>
-        <div class="price" :class="{'highlight': totalPrice>0}">
-            ¥{{totalPrice}}
+        <div class="r-shopcart" :class="{'enough': this.totalPrice>=this.minPrice}">
+            {{payDesc}}
         </div>
-        <div class="deliveryPrice">
-            另需配送费¥{{deliveryPrice}}元
+        <div class="ball-wrap">
+            <transition-group tag="div" name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+                <div v-for="(ball, index) in balls" v-show="ball.show" :key="index" class="ball"></div>
+            </transition-group>
         </div>
     </div>
-    <div class="r-shopcart" :class="{'enough': this.totalPrice>=this.minPrice}">
-        {{payDesc}}
-    </div>
-    <div class="ball-wrap">
-        <transition-group tag="div" name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
-            <div v-for="(ball, index) in balls" v-show="ball.show" :key="index" class="ball"></div>
-        </transition-group>
+    <!-- <div class="mask"></div> -->
+    <div class="cart-wrap">
+        <div class="cart-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty">清空</span>
+        </div>
+        <div class="cart-list">
+            <div v-for="food in selectFoods" class="cart-item">
+                <span class="name">{{food.name}}</span>
+                <span class="price"><i class="unit">¥</i>{{food.price * food.count}}</span>
+                <v-cartcontrol :food="food"></v-cartcontrol>
+            </div>
+        </div>
     </div>
 </div>
 </template>
 
 <style lang="stylus" rel="stylesheet/stylus">
+    @import "../../common/stylus/mixin.styl"
     .shopcart
         position fixed
         left 0
@@ -117,10 +134,70 @@
                 height 16px
                 background-color rgb(0, 160, 220)
                 border-radius 50%
+    .mask
+        position fixed
+        top 0
+        left 0
+        width 100%
+        height 100%
+        background-color rgba(7, 17, 27, 0.6)
+    .cart-wrap
+        position fixed
+        left 0
+        bottom 46px
+        z-index 40
+        width 100%
+        max-height 260px
+        background-color #fff
+        overflow hidden
+        .cart-header
+            position relative
+            height 40px
+            padding 0 18px
+            line-height 40px
+            background-color #f3f5f7
+            border-1px(rgba(7, 17, 27, 0.1))
+            .title
+                color rgb(7, 17, 27)
+                font-size 14px
+                font-weight 200
+            .empty
+                position absolute
+                top 0
+                right 18px
+                color rgb(0, 160, 220)
+                font-size 12px
+        .cart-list
+            padding 0 18px
+            .cart-item
+                position relative
+                height 48px
+                box-sizing border-box
+                padding 12px 0
+                line-height 24px
+                border-1px(rgba(7, 17, 27, 0.1))
+                .name
+                    color rgb(7, 17, 27)
+                    font-size 14px
+                .price
+                    position absolute
+                    right 92px
+                    top 12px
+                    color rgb(240, 20, 20)
+                    font-size 14px
+                    .unit
+                        font-style normal
+                        font-size 10px
+                .cartcontrol
+                    position absolute
+                    right 0
+                    top 12px
+                    height 24px
 </style>
 
 <script>
 import Velocity from 'velocity-animate';
+import cartcontrol from 'components/cartcontrol/';
 
 export default {
     created: function() {
@@ -220,8 +297,8 @@ export default {
                 opacity: 1
             }, {
                 complete: done,
-                duration: 1000,
-                easing: 'easeInOutSine'
+                duration: 600,
+                easing: 'easeInSine'
             })
         },
         afterEnter(el) {
@@ -237,6 +314,9 @@ export default {
                 });
             };
         }
+    },
+    components: {
+        'v-cartcontrol': cartcontrol
     }
 }
 </script>
