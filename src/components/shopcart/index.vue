@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="shopcart">
-        <div class="l-shopcart">
+        <div class="l-shopcart" @click="toggleList">
             <div class="logo">
                 <div class="logo-icon" :class="{'highlight': totalCount>0}">
                     <i class="icon-shopping_cart"></i>
@@ -24,18 +24,20 @@
             </transition-group>
         </div>
     </div>
-    <!-- <div class="mask"></div> -->
-    <div class="cart-wrap">
+    <div class="mask" v-show="displayStatus" @click="hideList"></div>
+    <div class="cart-wrap" v-show="displayStatus">
         <div class="cart-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <span class="empty" @click="clearCart">清空</span>
         </div>
-        <div class="cart-list">
-            <div v-for="food in selectFoods" class="cart-item">
-                <span class="name">{{food.name}}</span>
-                <span class="price"><i class="unit">¥</i>{{food.price * food.count}}</span>
-                <v-cartcontrol :food="food"></v-cartcontrol>
-            </div>
+        <div class="cart-list" ref="cart">
+            <ul>
+                <li v-for="food in selectFoods" class="cart-item">
+                    <span class="name">{{food.name}}</span>
+                    <span class="price"><i class="unit">¥</i>{{food.price * food.count}}</span>
+                    <v-cartcontrol :food="food"></v-cartcontrol>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -168,7 +170,9 @@
                 color rgb(0, 160, 220)
                 font-size 12px
         .cart-list
+            height 100%
             padding 0 18px
+            overflow hidden
             .cart-item
                 position relative
                 height 48px
@@ -196,6 +200,7 @@
 </style>
 
 <script>
+import BScroll from 'better-scroll';
 import Velocity from 'velocity-animate';
 import cartcontrol from 'components/cartcontrol/';
 
@@ -234,7 +239,8 @@ export default {
             }, {
                 show: false
             }],
-            dropBalls: []
+            dropBalls: [],
+            listShow: false
         }
     },
     computed: {
@@ -259,6 +265,16 @@ export default {
                 return `还差¥${this.minPrice - this.totalPrice}元`
             } else {
                 return '去结算'
+            }
+        },
+        displayStatus() {
+            if (this.selectFoods.length) {
+                if (this.listShow) {
+                    return true;
+                }
+            } else {
+                this.listShow = false;
+                return false;
             }
         }
     },
@@ -313,6 +329,30 @@ export default {
                     duration: 0
                 });
             };
+        },
+        toggleList() {
+            if (this.selectFoods.length) {
+                this.listShow = !this.listShow
+                if (this.listShow) {
+                    this.$nextTick(() => {
+                        if (!this.cartScroll) {
+                            this.cartScroll = new BScroll(this.$refs.cart, {
+                                click: true // 启用click事件
+                            })
+                        } else {
+                            this.cartScroll.refresh();
+                        }
+                    });
+                }
+            }
+        },
+        hideList() {
+            this.listShow = false
+        },
+        clearCart() {
+            this.selectFoods.forEach(function(item) {
+                item.count = 0;
+            })
         }
     },
     components: {
